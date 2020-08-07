@@ -1,5 +1,5 @@
 //
-//  ViewController.h
+//  SecViewController.h
 //  LogTest
 //
 //  Created by tpv tpv on 17/12/6.
@@ -8,8 +8,6 @@
 
 #import <UIKit/UIKit.h>
 
-@interface ViewController : UIViewController
-
+@interface SecViewController : UIViewController
 
 @end
-

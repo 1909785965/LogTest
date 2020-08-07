@@ -7,6 +7,11 @@
 //
 
 #import "AppDelegate.h"
+#import "MyLogFormatter.h"
+#import "CatchCrash.h"
+
+
+
 
 @interface AppDelegate ()
 
@@ -16,9 +21,47 @@
 
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
-    // Override point for customization after application launch.
+    
+    //for CocoaLumberJack
+    //开始时，你需要下面两行代码：
+    [DDLog addLogger:[DDASLLogger sharedInstance]];
+    [DDLog addLogger:[DDTTYLogger sharedInstance]];
+    //这将在你的日志框架中添加两个“logger”。也就是说你的日志语句将被发送到Console.app和Xcode控制 台（就像标准的NSLog）
+    [[DDTTYLogger sharedInstance] setLogFormatter:[[MyLogFormatter alloc] init]];
+    setenv("XcodeColors", "YES", 0);
+    //开启DDLog 颜色
+    [[DDTTYLogger sharedInstance] setColorsEnabled:YES];
+    //    [[DDTTYLogger sharedInstance] setForegroundColor:[UIColor blueColor] backgroundColor:nil forFlag:DDLogFlagVerbose];
+    NSString * applicationDocumentsDirectory = [[[[NSFileManager defaultManager]
+                                                  URLsForDirectory:NSDocumentDirectory inDomains:NSUserDomainMask] lastObject] path];
+    DDLogFileManagerDefault *documentsFileManager = [[DDLogFileManagerDefault alloc]
+                                                     initWithLogsDirectory:applicationDocumentsDirectory];
+    DDFileLogger *fileLogger = [[DDFileLogger alloc]
+                                initWithLogFileManager:documentsFileManager];
+    //这个框架的好处之一就是它的灵活性，如果你还想要你的日志语句写入到一个文件中，你可以添加和配置一个file logger:
+    fileLogger.rollingFrequency = 60 * 60 * 24; // 24 hour rolling
+    fileLogger.logFileManager.maximumNumberOfLogFiles = 7;
+    
+    [DDLog addLogger:fileLogger];
+    [fileLogger setLogFormatter:[[MyLogFormatter alloc] init]];
+    //上面的代码告诉应用程序要在系统上保持一周的日志文件。
+    //如果不设置rollingFrequency和maximumNumberOfLogFiles，
+    //则默认每天1个Log文件、存5天、单个文件最大1M、总计最大20M，否则自动清理最前面的记录。
+
+    
+    NSSetUncaughtExceptionHandler(&uncaughtExceptionHandler);
+    
     return YES;
 }
+
+
+
+
+
+
+
+
+
 
 - (void)applicationWillResignActive:(UIApplication *)application {
     // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.

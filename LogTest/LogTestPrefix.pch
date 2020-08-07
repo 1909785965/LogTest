@@ -1,0 +1,50 @@
+//
+//  LogTestPrefix.pch
+//  LogTest
+//
+//  Created by tpv tpv on 17/12/6.
+//  Copyright © 2017年 xumxum. All rights reserved.
+//
+
+#ifndef LogTestPrefix_pch
+#define LogTestPrefix_pch
+
+// Include any system framework and library headers here that should be included in all compilation units.
+// You will also need to set the Prefix Header build setting of one or more of your targets to reference this file.
+
+
+#import "SecViewController.h"
+
+//定义并导入CoCoaLumberJack框架
+#define LOG_LEVEL_DEF ddLogLevel
+#import "CocoaLumberjack.h"
+
+//通过DEBUG模式设置全局日志等级，DEBUG时为Verbose，所有日志信息都可以打印，否则Error，只打印
+#ifdef DEBUG
+static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
+#else
+static const DDLogLevel ddLogLevel = DDLogLevelError;
+#endif
+
+//[[DDTTYLogger sharedInstance] setColorsEnabled:YES];// 启用颜色区分
+
+//[DDLog addLogger:[DDASLLogger sharedInstance]];
+
+#define  AppLogE(format, ...) DDLogError(format,##__VA_ARGS__)
+#define  AppLogW(format, ...) DDLogWarn(format,##__VA_ARGS__)
+#define  AppLogI(format, ...) DDLogInfo(format,##__VA_ARGS__)
+#define  AppLogV(format, ...) DDLogVerbose(format,##__VA_ARGS__)
+#define  AppLogD(format, ...) DDLogDebug(format,##__VA_ARGS__)
+
+#ifdef DEBUG
+#define DLog(format, ...) DDLogError((@"[文件名:%s]" "[函数名:%s]" "[行号:%d]" format), __FILE__, __FUNCTION__, __LINE__, ##__VA_ARGS__);
+#else
+#define DLog(...);
+#endif
+
+
+
+
+
+
+#endif /* LogTestPrefix_pch */
