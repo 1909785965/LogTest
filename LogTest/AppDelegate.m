@@ -19,7 +19,7 @@
 
 @implementation AppDelegate
 
-//
+//window change
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     
     //for CocoaLumberJack
