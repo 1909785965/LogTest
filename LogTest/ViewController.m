@@ -37,12 +37,7 @@
     SecViewController * vc = [[SecViewController alloc]init];
     [self.view addSubview:vc.view];
     
-    NSArray * arr = @[@"a",@"b",@"c",@"d",@"e",@"f",@"g"];
-    for (int i = 0; i < 9; i++) {
-        
-        AppLogD(@"%@",arr[i]);
-    }
-    
+
 }
 
 - (void)didReceiveMemoryWarning {
